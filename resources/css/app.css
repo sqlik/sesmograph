@@ -1,0 +1,186 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* Onest variable font, self-hosted (no CDN). */
+@font-face {
+    font-family: 'Onest';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('/fonts/onest-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Onest';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('/fonts/onest-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Poppins, self-hosted - the Mono theme's geometric face. */
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/poppins-400-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/poppins-400-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/poppins-500-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('/fonts/poppins-500-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/poppins-600-latin.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('/fonts/poppins-600-latin-ext.woff2') format('woff2');
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/*
+ * sesmograph design tokens.
+ * Palette: the "Hum" theme from usehallmark.com - cream paper, dark
+ * blue-tinted ink, mint lead accent (primary actions), coral and pear
+ * as data accents, cyan reserved for focus rings only. Light theme only.
+ * Hierarchy: paper page, deeper-paper panels, white interactive fields.
+ */
+@theme {
+    --font-sans: 'Onest', ui-sans-serif, system-ui, sans-serif;
+
+    --color-canvas: oklch(97% 0.012 95); /* cream paper page */
+    --color-panel: oklch(94% 0.016 95); /* deeper paper sections, cards, rows */
+    --color-surface: #ffffff; /* inputs, code blocks, white elements */
+    --color-edge: oklch(86% 0.014 90); /* hairline rules */
+    --color-ink: oklch(20% 0.012 250); /* near-black, blue-tinted text */
+    --color-ink-soft: oklch(38% 0.014 100); /* secondary text */
+    --color-ink-faint: oklch(52% 0.014 90); /* placeholders, meta */
+
+    --color-accent: oklch(80% 0.16 150); /* mint - primary actions, dark text on top */
+    --color-accent-deep: oklch(70% 0.18 150); /* mint hover */
+    --color-focus: oklch(56% 0.2 235); /* cyan - focus rings ONLY */
+
+    --color-ok: oklch(45% 0.13 150); /* delivered (mint, text-grade) */
+    --color-ok-soft: oklch(80% 0.16 150 / 0.18);
+    --color-danger: oklch(52% 0.22 18); /* bounce, destructive (coral, text-grade) */
+    --color-danger-soft: oklch(68% 0.24 18 / 0.12);
+    --color-warn: oklch(52% 0.14 95); /* complaint, delay (pear, text-grade) */
+    --color-warn-soft: oklch(86% 0.18 95 / 0.16);
+
+    --radius-card: 1.25rem; /* 20px card radius */
+
+    --shadow-card:
+        0 12px 32px -16px oklch(20% 0.012 250 / 0.14),
+        0 1px 2px oklch(20% 0.012 250 / 0.06);
+
+    --color-chart-grid: oklch(86% 0.014 90); /* chart gridlines; themes may soften */
+}
+
+/*
+ * Mono theme (user-switchable on Settings -> Appearance): black ink on
+ * white, bold outlines, geometric Poppins, sidebar shell (layouts/mono).
+ * Only tokens change here; components stay shared with Hum.
+ */
+[data-theme='mono'] {
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+    --color-canvas: #f3f2f0; /* gray page + sidebar */
+    --color-panel: #ffffff; /* content sheet, cards */
+    --color-surface: #ffffff;
+    --color-edge: #101010; /* borders and rules are black */
+    --color-ink: #0d0d0d;
+    --color-ink-soft: #3f3f3f;
+    --color-ink-faint: #757370;
+
+    --color-accent: #101010; /* primary actions: filled black */
+    --color-accent-deep: #2f2f2f;
+
+    --radius-card: 1rem;
+    --shadow-card: 0 0 #0000;
+    --color-chart-grid: #e5e4e1;
+}
+
+/* Mono quirks that tokens alone cannot express. */
+[data-theme='mono'] .rounded-card {
+    border-width: 2px;
+}
+
+[data-theme='mono'] :is(input, select).border-edge {
+    border-width: 2px;
+    border-radius: 0.75rem;
+}
+
+/* Buttons and button-like links square off; badges/dots are spans and keep their shape. */
+[data-theme='mono'] :is(a, button).rounded-full {
+    border-radius: 0.75rem;
+}
+
+/* Black primary actions need light text (Hum uses dark-on-mint). */
+[data-theme='mono'] :is(a, button).bg-accent {
+    color: #ffffff;
+}
+
+/* Half-alpha edge backgrounds would be near-black washes here. */
+[data-theme='mono'] .hover\:bg-edge\/50:hover {
+    background-color: #ececea;
+}
+
+[data-theme='mono'] .bg-edge\/60 {
+    background-color: #ececea;
+}
+
+/* Active pills (settings nav, filter chips) flip to filled black. */
+[data-theme='mono'] nav[aria-label='Settings'] .bg-panel,
+[data-theme='mono'] a[aria-pressed='true'] {
+    background-color: #101010;
+    color: #ffffff;
+}
+
+@layer base {
+    body {
+        @apply bg-canvas font-sans text-ink antialiased;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+}
