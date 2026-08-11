@@ -68,6 +68,7 @@ lines are commented out - uncomment and fill them, and remove the existing
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://ses.example.com
+APP_TIMEZONE=Europe/Warsaw
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -81,6 +82,10 @@ SESSION_SECURE_COOKIE=true
 
 (To use SQLite instead: keep `DB_CONNECTION=sqlite`, remove the other `DB_`
 lines and run `touch database/database.sqlite`.)
+
+`APP_TIMEZONE` controls how event times are stored and displayed - set it
+to your local timezone ([full list](https://www.php.net/manual/en/timezones.php))
+or leave it out to stay on UTC.
 
 Then create the tables and build the config cache:
 

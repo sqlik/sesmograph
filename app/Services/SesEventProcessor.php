@@ -89,8 +89,10 @@ class SesEventProcessor
         $timestamp = Arr::get($event, "{$detailKey}.timestamp")
             ?? Arr::get($event, 'mail.timestamp');
 
+        // SES timestamps arrive in UTC; align them with the app timezone so
+        // stored events, sub-day counters and daily buckets stay consistent.
         return $timestamp !== null
-            ? CarbonImmutable::parse($timestamp)
+            ? CarbonImmutable::parse($timestamp)->setTimezone(config('app.timezone'))
             : CarbonImmutable::now();
     }
 }

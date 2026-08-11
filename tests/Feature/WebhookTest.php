@@ -136,6 +136,22 @@ class WebhookTest extends TestCase
         $this->assertDatabaseHas('events', ['topic_id' => $topic->id, 'type' => 'delivery']);
     }
 
+    public function test_event_time_is_stored_in_the_app_timezone(): void
+    {
+        config(['app.timezone' => 'Europe/Warsaw']);
+        $this->trustSignatures();
+        $topic = Topic::factory()->create();
+
+        $this->postJson("/webhooks/{$topic->webhook_token}", $this->snsEnvelope($this->sesEvent('Delivery')))
+            ->assertOk();
+
+        // 10:00:05 UTC from SES is 12:00:05 in Warsaw (CEST).
+        $this->assertDatabaseHas('events', [
+            'topic_id' => $topic->id,
+            'occurred_at' => '2026-08-10 12:00:05',
+        ]);
+    }
+
     public function test_duplicate_notification_is_idempotent(): void
     {
         $this->trustSignatures();

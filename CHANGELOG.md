@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- `APP_TIMEZONE` in `.env` sets the timezone used for storing and
+  displaying event times (default remains UTC); SES timestamps are
+  normalized to it on ingest
+
 ## 1.0.0 - 2026-08-12
 
 First public release.
