@@ -22,6 +22,11 @@ class User extends Authenticatable
         'mono' => 'Mono',
     ];
 
+    /** Mirrors the DB default so unsaved models resolve the same theme. */
+    protected $attributes = [
+        'theme' => 'mono',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *

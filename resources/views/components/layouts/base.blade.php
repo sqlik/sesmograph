@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="{{ auth()->user()?->theme ?? 'hum' }}">
+@php
+    // Account theme wins; guests fall back to the plain `theme` cookie so
+    // the choice survives logout. Unknown values collapse to the default.
+    $theme = auth()->user()?->theme ?? request()->cookie('theme');
+    $theme = array_key_exists((string) $theme, \App\Models\User::THEMES) ? $theme : 'mono';
+@endphp
+<html lang="en" data-theme="{{ $theme }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

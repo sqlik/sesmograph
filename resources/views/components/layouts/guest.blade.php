@@ -1,7 +1,8 @@
 @props(['title' => null])
 
 <x-layouts.base :title="$title">
-    <main class="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+    <main class="relative flex min-h-screen flex-col items-center justify-center px-4 py-12">
+        <x-theme-toggle-guest class="absolute right-4 top-4" />
         <x-logo size="lg" class="mb-8" />
         <div class="w-full max-w-sm rounded-card border border-edge bg-panel p-8">
             {{ $slot }}

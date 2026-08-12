@@ -25,6 +25,9 @@ class AppearanceController extends Controller
         $request->user()->update($data);
 
         // back(): works for the Appearance form and the quick toggle alike.
-        return back()->with('status', 'Theme updated');
+        // The plain cookie keeps the choice visible on the login screen
+        // after logout; httpOnly off so the guest toggle can overwrite it.
+        return back()->with('status', 'Theme updated')
+            ->withCookie(cookie()->forever('theme', $data['theme'], httpOnly: false));
     }
 }

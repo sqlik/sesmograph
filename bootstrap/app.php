@@ -28,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->append(SecurityHeaders::class);
 
+        // The theme cookie is written by JS on the login screen and read
+        // before authentication, so it must stay plaintext on both sides.
+        $middleware->encryptCookies(except: ['theme']);
+
         // SNS and API clients post without a session or CSRF token.
         $middleware->validateCsrfTokens(except: ['webhooks/*', 'api/*']);
     })

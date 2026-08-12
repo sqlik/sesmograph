@@ -66,11 +66,21 @@ class LoginController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
+        // Captured before logout: the login screen keeps the account's
+        // theme via the plain cookie (base layout falls back to it).
+        $theme = $request->user()?->theme;
+
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        $response = redirect()->route('login');
+
+        if ($theme !== null) {
+            $response->withCookie(cookie()->forever('theme', $theme, httpOnly: false));
+        }
+
+        return $response;
     }
 }

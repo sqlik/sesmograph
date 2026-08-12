@@ -16,10 +16,7 @@
             <x-ui.error for="password" />
         </div>
 
-        <label class="flex items-center gap-2 text-sm text-ink-soft">
-            <input type="checkbox" name="remember" value="1" class="h-4 w-4 rounded border-edge accent-accent">
-            Remember this device
-        </label>
+        <x-ui.switch name="remember" value="1">Remember this device</x-ui.switch>
 
         <x-ui.button type="submit" variant="primary" class="w-full">Sign in</x-ui.button>
     </form>
