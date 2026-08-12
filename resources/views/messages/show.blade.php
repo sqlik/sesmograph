@@ -98,7 +98,7 @@
                         <div class="flex items-baseline justify-between gap-4">
                             <h3 class="font-medium">{{ $event->label() }}</h3>
                             <time datetime="{{ $event->occurred_at->toIso8601String() }}" class="shrink-0 text-sm tabular-nums text-ink-soft">
-                                {{ $event->occurred_at->format('M j, Y H:i:s') }} UTC
+                                {{ $event->occurred_at->format('M j, Y H:i:s T') }}
                             </time>
                         </div>
 
