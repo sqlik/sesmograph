@@ -1,10 +1,15 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 - 2026-08-13
 
 - `APP_TIMEZONE` in `.env` sets the timezone used for storing and
   displaying event times (default remains UTC); SES timestamps are
   normalized to it on ingest
+- Login screen follows the theme system: Mono by default, a guest theme
+  toggle, and the chosen theme survives logout via a plain cookie;
+  "Remember this device" is now a switch
+- Fix message timeline labeling timestamps as UTC regardless of the
+  configured timezone
 - Fix copy icons (inline code chips and the webhook URL field) copying
   nothing and giving no feedback: the click handler reached the browser
   as an uncompiled Blade directive
