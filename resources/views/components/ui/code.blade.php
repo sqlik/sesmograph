@@ -5,6 +5,7 @@
     <code class="min-w-0 truncate rounded border border-edge bg-surface px-1 py-0.5 text-xs text-ink">{{ $value }}</code>
     <x-ui.copy-icon-button
         class="shrink-0 p-0.5"
-        x-on:click="navigator.clipboard.writeText(@js($value)); copied = true; setTimeout(() => copied = false, 1500)"
+        {{-- @js() is not compiled inside component-tag attributes; interpolate Js::from instead --}}
+        x-on:click="navigator.clipboard.writeText({{ \Illuminate\Support\Js::from($value) }}); copied = true; setTimeout(() => copied = false, 1500)"
     />
 </span>

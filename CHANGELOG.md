@@ -5,6 +5,9 @@
 - `APP_TIMEZONE` in `.env` sets the timezone used for storing and
   displaying event times (default remains UTC); SES timestamps are
   normalized to it on ingest
+- Fix copy icons (inline code chips and the webhook URL field) copying
+  nothing and giving no feedback: the click handler reached the browser
+  as an uncompiled Blade directive
 
 ## 1.0.0 - 2026-08-12
 

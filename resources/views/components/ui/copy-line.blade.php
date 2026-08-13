@@ -5,6 +5,7 @@
     <code class="block truncate rounded-lg border border-edge bg-surface py-2 pr-10 pl-3 text-xs">{{ $value }}</code>
     <x-ui.copy-icon-button
         class="absolute top-1/2 right-1 -translate-y-1/2"
-        x-on:click="navigator.clipboard.writeText(@js($value)); copied = true; setTimeout(() => copied = false, 1500)"
+        {{-- @js() is not compiled inside component-tag attributes; interpolate Js::from instead --}}
+        x-on:click="navigator.clipboard.writeText({{ \Illuminate\Support\Js::from($value) }}); copied = true; setTimeout(() => copied = false, 1500)"
     />
 </div>
