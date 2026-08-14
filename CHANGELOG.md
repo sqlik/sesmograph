@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.0 - 2026-08-14
 
 - Daily aggregates are updated with a single O(1) increment per event
   instead of recounting the whole topic-day after every webhook; heavy
