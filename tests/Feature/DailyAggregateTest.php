@@ -32,9 +32,6 @@ class DailyAggregateTest extends TestCase
         app(SesEventProcessor::class)->process($topic, $this->sesEvent('send'));
         app(SesEventProcessor::class)->process($topic, $this->sesEvent('delivery'));
 
-        // dispatchAfterResponse jobs run on app termination.
-        $this->app->terminate();
-
         $aggregate = DailyAggregate::query()->sole();
 
         $this->assertSame($topic->id, $aggregate->topic_id);
@@ -52,9 +49,24 @@ class DailyAggregateTest extends TestCase
         app(SesEventProcessor::class)->process($topic, $event);
         app(SesEventProcessor::class)->process($topic, $event);
 
-        $this->app->terminate();
-
         $this->assertSame(1, DailyAggregate::query()->sole()->send_count);
+    }
+
+    public function test_incremental_counts_match_a_full_recount(): void
+    {
+        $topic = Topic::factory()->create();
+
+        app(SesEventProcessor::class)->process($topic, $this->sesEvent('send', 'ses-message-1'));
+        app(SesEventProcessor::class)->process($topic, $this->sesEvent('delivery', 'ses-message-1'));
+        app(SesEventProcessor::class)->process($topic, $this->sesEvent('send', 'ses-message-2'));
+        app(SesEventProcessor::class)->process($topic, $this->sesEvent('bounce', 'ses-message-2'));
+
+        $incremental = DailyAggregate::query()->sole()->only(['send_count', 'delivery_count', 'bounce_count']);
+
+        DailyAggregate::recount($topic->id, today());
+
+        $this->assertSame(['send_count' => 2, 'delivery_count' => 1, 'bounce_count' => 1], $incremental);
+        $this->assertSame($incremental, DailyAggregate::query()->sole()->only(['send_count', 'delivery_count', 'bounce_count']));
     }
 
     public function test_recount_is_idempotent(): void

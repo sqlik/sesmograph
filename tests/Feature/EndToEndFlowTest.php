@@ -200,7 +200,7 @@ class EndToEndFlowTest extends TestCase
             'address' => 'gone@example.net', 'reason' => 'bounce', 'hits' => 1,
         ]);
 
-        // Aggregates recounted after-response: 2 sends, 1 delivery, 1 bounce, 1 open today.
+        // Aggregates counted inline per new event: 2 sends, 1 delivery, 1 bounce, 1 open today.
         $this->assertDatabaseHas('daily_aggregates', [
             'topic_id' => $this->topic->id,
             'send_count' => 2, 'delivery_count' => 1, 'bounce_count' => 1, 'open_count' => 1,

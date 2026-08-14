@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Jobs\RefreshDailyAggregate;
 use App\Jobs\TriggerImmediateAlerts;
+use App\Models\DailyAggregate;
 use App\Models\Event;
 use App\Models\Message;
 use App\Models\MessageContent;
@@ -61,10 +61,10 @@ class SesEventProcessor
 
         $message->applyEvent($type, $occurredAt);
 
-        // Off the webhook's critical path; recount is idempotent, so
-        // SNS replays and races cannot double-count.
+        // One O(1) increment per new event; the idempotent insert above
+        // already filtered SNS replays, so this cannot double-count.
         if ($stored->wasRecentlyCreated) {
-            RefreshDailyAggregate::dispatchAfterResponse($topic->id, $occurredAt->toDateString());
+            DailyAggregate::record($topic->id, $occurredAt->toDateString(), $type);
 
             if (in_array($type, ['bounce', 'complaint'], true)) {
                 SuppressedAddress::recordFromEvent($stored);

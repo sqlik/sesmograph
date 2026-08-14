@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Daily aggregates are updated with a single O(1) increment per event
+  instead of recounting the whole topic-day after every webhook; heavy
+  sending days no longer make ingestion progressively slower
+
 ## 1.1.1 - 2026-08-14
 
 - DemoSeeder no longer creates events in the future: today's sends stop

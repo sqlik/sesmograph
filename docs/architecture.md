@@ -39,9 +39,12 @@ your app --(SES send)--> Amazon SES --> SNS topic --HTTPS--> /webhooks/{token}
 
 `daily_aggregates` holds one row per topic per day with one counter per event
 type (unique `(topic_id, date)`); rates are always derived, never stored.
-After each newly inserted event the affected topic-day is recounted via a
-`dispatchAfterResponse` job - the webhook answers fast and **no queue worker
-is required** for ingestion. Dashboards read aggregates only; the raw
+Each newly inserted event bumps its topic-day counter with a single atomic
+increment (`DailyAggregate::record`) - O(1) per event, inline in the webhook
+request, and **no queue worker is required** for ingestion. The first event
+of a topic-day falls back to a full recount, which creates the row;
+`recount()` stores absolute counts, so replays and races cannot
+double-count. Dashboards read aggregates only; the raw
 `events` table is touched just for sub-day counters (last hour / 24 h) and
 the activity feeds.
 
