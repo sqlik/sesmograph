@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 - 2026-08-14
+
+- DemoSeeder no longer creates events in the future: today's sends stop
+  at the current time, so a freshly seeded instance never shows
+  timestamps ahead of the clock
+
 ## 1.1.0 - 2026-08-13
 
 - `APP_TIMEZONE` in `.env` sets the timezone used for storing and
