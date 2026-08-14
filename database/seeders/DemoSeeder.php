@@ -33,6 +33,13 @@ class DemoSeeder extends Seeder
                 $sequence++;
                 $topic = $sequence % 3 === 0 ? $billing : $app;
                 $sentAt = $day->copy()->startOfDay()->addMinutes(fake()->numberBetween(7 * 60, 21 * 60));
+
+                // A day in progress only has the sends that already
+                // happened - the demo must never show future events.
+                if ($sentAt->isFuture()) {
+                    continue;
+                }
+
                 $recipient = fake()->safeEmail();
 
                 /** @var Message $message */
@@ -47,8 +54,9 @@ class DemoSeeder extends Seeder
                     'last_event_at' => null,
                 ]);
 
-                $send = $this->event($message, 'send', $sentAt, []);
-                $message->applyEvent('send', $send->occurred_at);
+                if ($send = $this->event($message, 'send', $sentAt, [])) {
+                    $message->applyEvent('send', $send->occurred_at);
+                }
 
                 if (($spike && $n % 3 === 0) || (! $spike && $sequence % 34 === 0)) {
                     $bounce = $this->event($message, 'bounce', $sentAt->copy()->addSeconds(4), [
@@ -62,7 +70,10 @@ class DemoSeeder extends Seeder
                             ]],
                         ],
                     ]);
-                    $message->applyEvent('bounce', $bounce->occurred_at);
+
+                    if ($bounce) {
+                        $message->applyEvent('bounce', $bounce->occurred_at);
+                    }
 
                     continue;
                 }
@@ -74,7 +85,10 @@ class DemoSeeder extends Seeder
                             'expirationTime' => $sentAt->copy()->addHours(8)->toIso8601String(),
                         ],
                     ]);
-                    $message->applyEvent('delivery_delay', $delay->occurred_at);
+
+                    if ($delay) {
+                        $message->applyEvent('delivery_delay', $delay->occurred_at);
+                    }
 
                     continue;
                 }
@@ -86,20 +100,29 @@ class DemoSeeder extends Seeder
                         'reportingMTA' => 'a8-50.smtp-out.amazonses.com',
                     ],
                 ]);
-                $message->applyEvent('delivery', $delivery->occurred_at);
+
+                if ($delivery) {
+                    $message->applyEvent('delivery', $delivery->occurred_at);
+                }
 
                 if ($sequence % 4 === 0) {
                     $open = $this->event($message, 'open', $sentAt->copy()->addMinutes(12), [
                         'open' => ['ipAddress' => fake()->ipv4(), 'userAgent' => 'Mozilla/5.0'],
                     ]);
-                    $message->applyEvent('open', $open->occurred_at);
+
+                    if ($open) {
+                        $message->applyEvent('open', $open->occurred_at);
+                    }
                 }
 
                 if ($sequence % 8 === 0) {
                     $click = $this->event($message, 'click', $sentAt->copy()->addMinutes(14), [
                         'click' => ['link' => 'https://example.com/activate', 'ipAddress' => fake()->ipv4()],
                     ]);
-                    $message->applyEvent('click', $click->occurred_at);
+
+                    if ($click) {
+                        $message->applyEvent('click', $click->occurred_at);
+                    }
                 }
 
                 if ($sequence % 97 === 0) {
@@ -109,7 +132,10 @@ class DemoSeeder extends Seeder
                             'complainedRecipients' => [['emailAddress' => $recipient]],
                         ],
                     ]);
-                    $message->applyEvent('complaint', $complaint->occurred_at);
+
+                    if ($complaint) {
+                        $message->applyEvent('complaint', $complaint->occurred_at);
+                    }
                 }
             }
         }
@@ -118,8 +144,12 @@ class DemoSeeder extends Seeder
         Artisan::call('app:rebuild-suppressed');
     }
 
-    private function event(Message $message, string $type, \DateTimeInterface $at, array $payload): Event
+    private function event(Message $message, string $type, \DateTimeInterface $at, array $payload): ?Event
     {
+        if ($at > now()) {
+            return null;
+        }
+
         return $message->events()->create([
             'topic_id' => $message->topic_id,
             'type' => $type,
